@@ -56,3 +56,16 @@ jobs:
         context: .
         push: true
         tags: ${{ steps.meta.outputs.tags }}
+
+  test-xfer:
+    name: Integration Test Transfer
+    needs: [build-and-push]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: singularity run htcondor/mini:9.10-el7
+      - run: singularity run hub.opensciencegrid.org/opensciencegrid/htcondor-file-transfer-ep:latest
+      - run: ./run_singularity.sh
+
